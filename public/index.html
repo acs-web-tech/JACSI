@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Home</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@300&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css"
+    />
+   
+    <link rel="stylesheet" href="styles.css" />
+    <script
+    type="text/javascript"
+    src="https://www.gstatic.com/charts/loader.js"
+  ></script>   
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+   <script src="script.js"></script>
+  
+  </head>
+  <body>
+    <aside class="left-container">
+      <div class="home"><i class="bi bi-speedometer"></i></div>
+      <div class="menus">
+        <div class="items">DashBoard</div>
+        <div class="items" onclick="window.open('/payment')">Your Payment url</div>
+        <div class="items" onclick="window.open('/getpaymentsDashboard')">Total Payments done</div>
+        <div class="items" onclick="window.open('/invoice')">Invoice</div>
+        <div class="items" onclick="window.open('/turnover')">Turnover Data</div>
+        <div class="items">Payout settings</div>
+        <div class="items">Profile</div>
+      </div>
+    </aside>
+    <section class="billing">
+    <div class="price">
+    $0
+    <i class="bi bi-coin"></i>
+    </div>
+    <section class="update">
+      Updated data till 12/10/22</br/>
+    </section>
+    </section>
+    <div class="chart" ></div>
+   <script type="text/javascript">
+     let data = fetch("/turnoverdeliver").then((e)=>{
+      return e.json()
+     }).then((e)=>{
+      let amount = 0
+      let temp = 0
+         e.forEach((value)=>{
+                
+             value.payments.forEach((value2)=>{
+
+                  if(value2.amount!=undefined){
+                  console.log("60",value2.amount)
+                  amount+=parseInt(value2.amount)
+}
+                
+             })
+         })
+         document.querySelector(".price").innerText="RS:"+amount
+     })
+   </script>
+  
+  </body>
+</html>

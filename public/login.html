@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Login</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+	<style type="text/css">
+		*{
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+		html,body{
+			width: 100%;
+			height: 100%;
+			overflow: hidden;
+		}
+		.background{
+ 	width: 100%;
+ 	height: 100%;
+ 	background-image:linear-gradient(40deg,#2aa7d1 0% 10%,#2a6ad1  40%,#d12ace  100%) ;
+ 	position: absolute;
+       }
+       .left-square{
+       	width: 30%;
+       	height: 50%;
+       	background-color: rgba(190, 190, 190, 0.4);
+       	position: absolute;
+       	transform: translateY(-100px) translateX(-240px) rotate(50deg);
+       	box-shadow: 2px 2px 10px grey;
+       }
+        .right-square{
+       	    width: 30%;
+    height: 50%;
+    background-color: rgba(190, 190, 190, 0.4);
+    position: absolute;
+    transform: translateY(445px) translateX(1131px) rotate(31deg);
+    box-shadow: 2px 2px 10px grey;
+       }
+       .form{
+	text-align: center;
+       	width: 50%;
+       	height: 70%;
+       	display: flex;
+       	flex-direction: column;
+       	justify-content: center;
+        margin: 10% auto;
+       	padding: 8%  ;
+       	padding-left: 8%;
+       	background-color: #cdd1d0;
+       }
+       .form>input{
+       	width: 80%;
+       	height: 60px;
+        margin-top: 5%;
+        background-color: #cdd1d0;
+        outline: none;
+        border: none;
+        font-size: 1.3rem;
+        border-bottom: 2px solid grey;
+        margin: 0 auto;
+       }
+       .form>input::placeholder{
+         font-family: sans-serif;
+         font-size: 1.3rem;
+        
+       }
+       
+       .form>button{
+       	display: block;
+       	width: 120px;
+       	height: 50px;
+       	border-radius: 150px;
+       	border: none;
+       	outline: none;
+       background-image:linear-gradient(to left,#2aa7d1 0% 10%,#2a6ad1  40%,#d12ace  100%) ;
+       	color: white;
+       	font-size: 1rem;
+       	margin-top: 5%;
+        margin: 5% auto;
+       }
+       .bi{
+       	font-size: 2.5rem;
+
+       }
+	</style>
+</head>
+<body>
+<div class="background">
+	<div class="left-square"></div>
+	<div class="right-square"></div>
+	<div class="form">
+       
+		<div style="padding: 0;"><i class="bi bi-person-circle"></i></div>
+		<input type="text" placeholder="user name" required class="username"/>
+		<input type="password" placeholder="password" required class="userPassword">
+        <button class="log">Login/Register</button>
+   
+	</div>
+</div>
+    <script >
+    	document.querySelector(".log").onclick=(e)=>{
+    	if(document.querySelector(".username").value!=""&&document.querySelector(".userPassword").value!="" && document.querySelector(".userPassword").value.length>8){
+    	let httpRequest   = new XMLHttpRequest()
+
+    	httpRequest.responsetype="application/json"
+    	httpRequest.onreadystatechange =function(){
+    		if(httpRequest.status==200 && httpRequest.readyState==4){
+    			
+                     if(JSON.parse(httpRequest.response).status!="ok"){
+                     	location.assign("/login")
+                       		}else{
+                                location.assign("/ind")
+                            }
+                     }
+    	}
+    	httpRequest.open("POST","/loginvalidate")
+    	httpRequest.setRequestHeader("Content-Type","application/json")
+    	httpRequest.send(JSON.stringify({username:document.querySelector(".username").value,password:document.querySelector(".userPassword").value}))
+    }else{
+    	alert("some fields are not filled or the password length is less than 8")
+    }
+    }
+    </script>
+</body>
+</html>

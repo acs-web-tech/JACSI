@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Other page</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@300&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css"
+    />
+
+    <link rel="stylesheet" href="styles.css" />
+    
+  
+    <style>
+      .view-btn{
+        width: 100px;
+        height: 40px;
+        background-color: blueviolet;
+        outline: none;
+        color: white;
+        border: none;
+        font-family: sans-serif;
+        border-radius: 5px;
+      }
+      select{
+         width: 100px;
+        height: 40px;
+      }
+      .pie-chart{
+        width: 50%;
+        height: 100%;
+        margin-left: 30%;
+        text-align: center;
+      }
+    </style>
+   
+  </head>
+  <body>
+    <aside class="left-container">
+      <div class="home"><i class="bi bi-speedometer"></i></div>
+      <div class="menus">
+        <div class="items">DashBoard</div>
+        <div class="items">Your Payment url</div>
+        <div class="items">Total Payments done</div>
+        <div class="items" onclick="window.open('page2.html')">
+          Turnover Data
+        </div>
+        <div class="items">Payout settings</div>
+        <div class="items">Profile</div>
+      </div>
+    </aside>
+    <div class="analatyics">
+      <div class="year-selection">
+        <select class="year-list">
+          
+        </select>
+        <button class="view-btn" onclick="renderChart()">View Data</button>
+      </div>
+    </div>
+    <div class="pie-chart"></div>
+  <script
+      type="text/javascript"
+      src="https://www.gstatic.com/charts/loader.js"
+    ></script>
+    <script type="text/javascript">
+      google.charts.load("current",{"packages":["corechart"]})
+    </script>
+    <script type="text/javascript">
+      google.charts.setOnLoadCallback(renderChart)
+      let data  = fetch("/getPayments").then((e)=>e.json()).then((e)=>{
+        let paydata = JSON.parse(e[0].paymentDetails)
+        let years = []
+        let yearAnal = []
+        paydata.forEach((value)=>{
+           value.payments.forEach((value2)=>{
+                       if(!years.includes((new Date(value2.updated_at)).getFullYear()) && Number.isNaN((new Date(value2.updated_at)).getFullYear())==false){
+            
+                years.push((new Date(value2.updated_at)).getFullYear())
+                yearAnal.push(value)
+               
+          }
+           })
+        })
+        years.forEach((value)=>{
+          document.querySelector(".year-list").innerHTML+=`<option>${value}</option>`
+        })
+        console.log(years)
+      return paydata
+      })
+     function renderChart(){
+       data.then((e)=>{
+          console.log(e)
+         let month = [{month:"Jan",amount:0},{month:"Feb",amount:0},{month:"March",amount:0}
+         ,{month:"April",amount:0},{month:"May",amount:0},{month:"June",amount:0},{month:"July",amount:0},{month:"Aug",amount:0},{month:"Sep",amount:0},{month:"Oct",amount:0},{month:"Nov",amount:0},{month:"Dec",amount:0}]
+         e.forEach((value1,index1)=>{
+          value1.payments.forEach((value2,index2)=>{
+           
+              month.forEach((value3,index3)=>{
+                  //console.log(value1)
+
+                   
+                  if((new Date(value2.updated_at)).getMonth()==index3 && parseInt(document.querySelector(".year-list").value)==(new Date(value2.updated_at)).getFullYear()){
+                      month[index3].amount +=parseInt(value2.amount) 
+                      console.log(parseInt(value2.amount))
+               }
+             
+              })
+               
+              
+          })
+          
+         })
+         console.log(month)
+        let chartData = google.visualization.arrayToDataTable([
+             ["Month","Amount"],
+             ["Jan",month[0].amount],
+             ["Feb",month[1].amount],
+             ["March",month[2].amount],
+             ["April",month[3].amount],
+             ["May",month[4].amount],
+             ["June",month[5].amount],
+             ["July",month[6].amount],
+             ["Aug",month[7].amount],
+             ["Sep",month[8].amount],
+             ["Oct",month[9].amount],
+             ["Nov",month[10].amount],
+             ["Dec",month[11].amount]
+          ])
+       let chartDataDraw =  new  google.visualization.PieChart(document.querySelector(".pie-chart"))
+       chartDataDraw.draw(chartData,{title:"Income Analatics",is3D:true})
+       })
+     }
+
+    </script>
+  </body>
+</html>

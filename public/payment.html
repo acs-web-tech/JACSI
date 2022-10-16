@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Generate Payment Url</title>
+	 <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@300&display=swap"
+      rel="stylesheet"
+    />
+	<style type="text/css">
+		input[type="number"]::-webkit-inner-spin-button{
+			appearance: none;
+		}
+		html,body{
+			width: 100%;
+			height: 100%;
+			padding: 1px;
+		}
+		*{
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+		.form{
+			padding: 2px;
+			width: 40%;
+			height: 40%;
+			background-color: #ffff;
+			box-shadow: 2px 2px 15px #e1e8e3;
+			display: flex;
+			justify-content: center;
+			gap: 10px;
+			align-items: center;
+			flex-direction: column;
+			margin:5% auto;
+		}
+		input[type="text"],input[type="number"],input[type="purporse"]{
+			width: 200px;
+			height: 15%;
+		}
+		input[type="submit"]{
+			width: 100px;
+			height: 15%;
+			border: none;
+			background-color: #7a22e6;
+			color: white;
+			font-family: "Oswald";
+			font-size: 1.2rem;
+			border-radius: 50px;
+		}
+		th,tr,td,table{
+			border: 2px solid red;
+			border-collapse: collapse;
+		}
+	</style>
+</head>
+<body>
+ <div class="form">
+ 	<h2>Create Payment Url</h2>
+ 	<input type="text" name="name" placeholder="Name">
+ 	<input type="number" name="amount" placeholder="amount">
+ 	<input type="text" name="purporse" placeholder="purporse">
+ 	<input type="submit" onclick="submitForm()" name="save">
+ </div>
+ <table class="Payment-data">
+ 	<thead>
+ 		<tr>
+ 			<th>ID</th>
+ 			<th>Amount</th>
+ 			<th>Purporse</th>
+ 			<th>Url</th>
+ 			<th>Redirect</th>
+
+ 		</tr>
+    <tbody class="datarenderarea">
+    	
+    </tbody>
+ 	</thead>
+ </table>
+ <script src="https://js.instamojo.com/v1/checkout.js"></script>
+<script>
+	document.addEventListener("DOMContentLoaded",(e)=>{
+		let fetchData  = fetch("/listpayments",{
+			method:"POST",
+			headers:{
+				"accepts":"application/json",
+
+			}
+		})
+		.then((e)=>{
+      return e.json()
+		}).then((e)=>{
+			console.log(e)
+			e.forEach((value)=>{
+				document.querySelector(".datarenderarea").innerHTML+= `<tr>
+              <td><b>${value.id}</b></td>
+               <td><b>${value.amount}</b></td>
+                <td><b>${value.purpose}</b></td>
+                 <td><b>${value.longurl}</b></td>
+                  <td><b>${value.redirect_url}</b></td>
+
+				</tr>` 
+			})
+		})
+	})
+	function submitForm(){
+		let name = document.getElementsByName("name")[0].value
+		let amount = document.getElementsByName("amount")[0].value
+		let purporse=document.getElementsByName("purporse")[0].value
+		console.log(name,amount,purporse)
+		if(name!=""&&amount!="" && purporse!=""){
+		let fetchData = fetch("/storepaymenturl",{
+			method:"POST",
+			headers:{"Content-Type":"application/json"},
+			body:JSON.stringify({buyer_name:name,amount,purporse})
+		}).then((e)=>{
+
+				location.reload()
+			
+		})
+	}
+	}
+</script>
+ </body>
+</html>

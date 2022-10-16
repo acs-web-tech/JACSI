@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Register</title>
+	<style type="text/css">
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		body
+		{
+			overflow: hidden ;
+		}
+		.background{
+ 	width: 100%;
+ 	height: 100%;
+ 	background-image:linear-gradient(40deg,#2aa7d1 0% 10%,#2a6ad1  40%,#d12ace  100%) ;
+ 	position: absolute;
+       }
+        .left-square{
+       	width: 30%;
+       	height: 50%;
+       	background-color: rgba(190, 190, 190, 0.4);
+       	position: absolute;
+       	transform: translateY(-100px) translateX(-240px) rotate(50deg);
+       	box-shadow: 2px 2px 10px grey;
+       }
+        .right-square{
+       	    width: 30%;
+    height: 50%;
+    background-color: rgba(190, 190, 190, 0.4);
+    position: absolute;
+    transform: translateY(445px) translateX(1131px) rotate(31deg);
+    box-shadow: 2px 2px 10px grey;
+       }
+  form{
+	text-align: center;
+       	width: 50%;
+       	height: 70%;
+       	display: flex;
+       	flex-direction: column;
+       	justify-content: center;
+        margin: 5% auto;
+       	padding: 8%  ;
+       	padding-left: 8%;
+       	background-color: #cdd1d0;
+       }
+       form>input{
+       	width: 80%;
+       	height: 60px;
+        margin-top: 5%;
+        background-color: #cdd1d0;
+        outline: none;
+        border: none;
+        font-size: 1.3rem;
+        border-bottom: 2px solid grey;
+        margin: 0 auto;
+       }
+       form>input::placeholder{
+         font-family: sans-serif;
+         font-size: 1.3rem;
+        
+       }
+       
+       form>button{
+       	display: block;
+       	width: 120px;
+       	height: 50px;
+       	border-radius: 150px;
+       	border: none;
+       	outline: none;
+       background-image:linear-gradient(to left,#2aa7d1 0% 10%,#2a6ad1  40%,#d12ace  100%) ;
+       	color: white;
+       	font-size: 1rem;
+       	margin-top: 5%;
+        margin: 5% auto;
+       }
+	</style>
+</head>
+<body>
+<div class="background">
+	<div class="left-square"></div>
+	<div class="right-square"></div>
+	<form action="/invoicegenerator" method="post" enctype="application/x-www-form-urlencoded">
+		<input  type="text" placeholder="Payment Id" name="paymentid"/><br/><br/>
+		<input type="number"  placeholder="Mobile number" name="number"/><br/><br/>
+		<input type="email" placeholder="Email" name="email"><br/><br/>
+		 <button class="log">Download invoice</button>
+	</form>
+</div>
+
+</body>
+</html>
