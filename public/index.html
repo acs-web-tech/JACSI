@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Home</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@300&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css"
+    />
+   
+    <link rel="stylesheet" href="styles.css" />
+    <script
+    type="text/javascript"
+    src="https://www.gstatic.com/charts/loader.js"
+  ></script>   
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+   <script src="script.js"></script>
+  <style type="text/css">
+    .exchange-rate{
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          padding-top: 5%;
+          padding-left: 10%;
+          text-align: center;
+          gap: 30px;
+
+    }
+    .calc{
+      background-color: blueviolet;
+      width: 80px;
+      height: 30px;
+      border: none;
+      outline: none;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    input{
+      width: 200px;
+      height: 30px;
+    }
+
+  </style>
+  </head>
+  <body>
+    <aside class="left-container">
+      <div class="home"><i class="bi bi-speedometer"></i></div>
+      <div class="menus">
+        <div class="items">DashBoard</div>
+        <div class="items" onclick="window.open('/payment')">Your Payment url</div>
+        <div class="items" onclick="window.open('/getpaymentsDashboard')">Total Payments done</div>
+        <div class="items" onclick="window.open('/invoice')">Invoice</div>
+        <div class="items" onclick="window.open('/turnover')">Turnover Data</div>
+        <div class="items" onclick="window.open('/payout')">Payout settings</div>
+      
+      </div>
+    </aside>
+    <section class="billing">
+    <div class="price">
+    $0
+    <i class="bi bi-coin"></i>
+    </div>
+    <section class="update">
+      Updated data till 21/10/22</br/>
+    </section>
+    </section>
+    <section class="billing">
+    <div class="price price-gst">
+    $0
+    <i class="bi bi-coin"></i>
+    </div>
+    <section class="update">
+      Updated data till 21/10/22</br/>
+    </section>
+    </section>
+    <div class="exchange-rate" >
+      <b>Exchange rate calculation </b>
+    
+      <div class="form">
+        <br/>
+       <input type="number" id="amount">
+       <br/>
+      
+       </div>
+     <label>
+      <b>From :</b>
+     <select class="currency-from">
+         <option value="USD">USD</option>
+         <option value="EUR">EUR</option>
+         <option value="GBP">POUND</option>
+          <option value="INR">INR</option>
+
+       </select>
+       </label>
+        <label>
+      <b>TO :</b>
+     <select class="currency-to">
+         <option value="USD">USD</option>
+         <option value="EUR">EUR</option>
+         <option value="GBP">POUND</option>
+          <option value="INR">INR</option>
+       </select>
+       </label>
+       <button onclick="calcExchangeRate()"class="calc">calculate</button>
+    <b class="des">The current exchange rate of INR is 82.37 and converted based on usd $1 dollars</b>
+    </div>
+
+   <script type="text/javascript">
+     let data = fetch("/turnoverdeliver").then((e)=>{
+      return e.json()
+     }).then((e)=>{
+      let amount = 0
+      let gst = 0
+         e.forEach((value)=>{
+                
+             value.payments.forEach((value2)=>{
+
+                  if(value2.amount!=undefined&&value2.failure==null){
+                  console.log("60",value2.amount)
+                  amount+=parseFloat(value2.amount)
+}
+                
+             })
+         })
+          e.forEach((value)=>{
+                
+             value.payments.forEach((value2)=>{
+
+                  if(value2.amount!=undefined && value2.failure==null){
+                  console.log("60",value2.amount)
+                  gst+=parseFloat(value2.total_taxes)+parseFloat(value2.fees)
+}
+                
+             })
+         })
+          console.log(gst)
+         document.querySelector(".price").innerText="RS:"+amount
+         document.querySelector(".price-gst").innerText="GST/convinence fee spend:"+gst
+     })
+   
+      function calcExchangeRate(){
+        let data  = fetch("https://api.frankfurter.app/latest?from="+document.querySelector(".currency-from").value).then((e)=>e.json()).then((e)=>{
+          console.log(e)
+          document.querySelector(".des").innerText =  `Convertion from ${document.querySelector(".currency-from").value} to ${document.querySelector(".currency-to").value} is ${(parseFloat(document.querySelector("input[type='number']").value)*parseFloat(e.rates[document.querySelector(".currency-to").value])).toFixed(2)} `
+        })
+      }
+   </script>
+  
+  </body>
+</html>

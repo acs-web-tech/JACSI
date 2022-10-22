@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Payment List</title>
+	 <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css"
+    />
+     <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@300&display=swap"
+      rel="stylesheet"
+    />
+	<style>
+		html,body{
+			width: 100%;
+			height: 100%;
+		}
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		.paid-list{
+			padding: 2px;
+		    width: 100%;
+		    height: 100%;
+		}
+
+		.detail{
+			font-family: "Oswald";
+			padding: 2px;
+			height: 20%;
+			background-color: #c6ccc8;
+			margin-top: 2%;
+			box-shadow: 2px 2px 5px grey;
+			font-size: 1.5rem;
+			overflow-y: scroll;
+
+		}
+		table,th,td{
+			border: 2px solid blue;
+			border-collapse: collapse;
+			font-size: 1.2rem;
+			padding: 10px;
+			vertical-align: middle;
+		}
+		
+	</style>
+</head>
+<body>
+	<div class="paid-list">
+
+</div>
+<script >
+	let data = fetch("/getPayments",{
+		method:"GET",
+		accepts:"application/json"
+	}).then((e)=>e.json()).then((e)=>{
+		console.log(JSON.parse(e[0].paymentDetails))
+		JSON.parse(e[0].paymentDetails).forEach((value)=>{
+			document.querySelector(".paid-list").innerHTML+=`
+			
+	<details class="detail">
+	<summary><i class="bi bi-bank"></i>${value.purpose}</summary>
+	<table>
+	<thead>
+     <th>S.no</th>
+     <th>Payment Date</th>
+     <th>Amount</th>
+     <th>Name</th>
+     <th>Email</th>
+     <th> Payment Id</th>
+     <th>Payment Mode</th>
+     <th>Phone </th>
+     <th>Purpose</th>
+     <th>Failure</th>
+    
+	</thead>
+    <tbody>
+     ${
+     	value.payments.map((value2,index)=>{
+     		return `
+              <tr>
+                <td>${index+1}</td>
+                <td>${(new Date(value2.updated_at)).toString()}</td>
+                <td>${value2.amount}</td>
+                <td>${value2.name}</td>
+                <td>${value2.email}</td>
+                <td>${value2.id}</td>
+                 <td>${value2.instrument_type}</td>
+                 <td>${value2.phone}</td>
+                 <td>${value2.title}</td>
+                 <td>${value2.failure}</td>
+              </tr>
+     		`
+     	}).toString().replaceAll(",","")
+     }
+    </tbody>
+   </table>
+`
+		})
+	})
+       
+
+     
+
+	
+</script>
+</body>
+</html>

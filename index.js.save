@@ -1,0 +1,9 @@
+let sql = require("mysql")
+let sqlConnection = new sql.createConnection({
+    user:"root",
+    password:"",
+    database:"jacsi",
+    host:"127.0.0.1"
+
+  })
+sqlConnection.query("select * from customers ",function(err
